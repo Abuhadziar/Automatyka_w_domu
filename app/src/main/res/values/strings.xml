@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Automatyka_w_domu</string>
+    <string name="scan_button">Scan</string>
+    <string name="Done_button">Done</string>
+    <string name="start_screen">Start</string>
+    <string name="scan_screen">Scan</string>
+    <string name="main_screen_bar">Your Devices</string>
+    <string name="main_screen">Main</string>
+</resources>
