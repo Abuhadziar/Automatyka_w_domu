@@ -77,7 +77,7 @@ class BluetoothController(private val context: Context, private val bluetoothVie
     }
 
     @SuppressLint("MissingPermission")
-    private fun deviceFound(device: BluetoothDevice): BluetoothDevice {
+    internal fun deviceFound(device: BluetoothDevice): BluetoothDevice {
         device.connectGatt(context, true, gattCallback)
         return device
     }

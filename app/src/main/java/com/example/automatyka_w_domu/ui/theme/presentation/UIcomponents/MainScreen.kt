@@ -27,18 +27,20 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.automatyka_w_domu.model.UiState
+import com.example.automatyka_w_domu.ui.theme.AppViewModel
 
 @SuppressLint("MissingPermission")
 @Composable
 fun MainScreen(
     onPlusButtonClicked: () -> Unit,
-    uiState: UiState,
     iconImage: Painter,
+    viewModel: AppViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val status = uiState.deviceStatus
-    val connectedDevices = uiState.connectedDevices
+    val devType: String
+    val connectedDevices = viewModel.toDeviceInfoList(devType = "")
 
     Column(
         modifier = modifier
@@ -69,19 +71,19 @@ fun MainScreen(
                         Spacer(modifier = Modifier.width(16.dp))
 
                         Text(
-                            text = device.name ?: "Unknown Device",
+                            text = device.deviceName ?: "Unknown Device",
                             fontWeight = FontWeight.Bold
                         )
 
                         Spacer(modifier = Modifier.weight(1f))
 
                         Text(
-                            text = if (status) {
+                            text = if (device.deviceStatus) {
                                 "ON"
                             } else {
                                 "OFF"
                             },
-                            color = if (status) {
+                            color = if (device.deviceStatus) {
                                 Color.Green
                             } else {
                                 Color.Red

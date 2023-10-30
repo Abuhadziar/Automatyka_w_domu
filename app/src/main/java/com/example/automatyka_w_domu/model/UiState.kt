@@ -5,5 +5,4 @@ import android.bluetooth.BluetoothDevice
 data class UiState (
     val scannedDevices: List<BluetoothDevice>,
     val connectedDevices: List<BluetoothDevice>,
-    val deviceStatus: Boolean //placeholder
 )

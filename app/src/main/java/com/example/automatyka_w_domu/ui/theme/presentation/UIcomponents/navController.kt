@@ -93,7 +93,6 @@ fun App() {
             composable(route = AppScreen.Main.name) {
                 MainScreen(
                     onPlusButtonClicked = { navController.navigate(AppScreen.Scan.name) },
-                    uiState = uiState,
                     iconImage = painterResource(R.drawable.app_icon) //placeholder
                 )
             }
