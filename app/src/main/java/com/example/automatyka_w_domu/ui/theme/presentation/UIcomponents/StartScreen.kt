@@ -14,7 +14,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.unit.dp
+import com.example.automatyka_w_domu.R
 
 @Composable
 fun StartScreen(
@@ -32,14 +34,14 @@ fun StartScreen(
             painter = iconImage,
             contentDescription = "Start",
             modifier = modifier
-                .size(72.dp)
+                .size(dimensionResource(R.dimen.image_size))
                 .clickable { onStartButtonClicked }
         )
         Button (
             onClick = onStartButtonClicked,
             modifier = modifier
-                .widthIn(64.dp)
-                .padding(16.dp)
+                .widthIn(dimensionResource(R.dimen.size_large))
+                .padding(dimensionResource(R.dimen.padding_medium))
         ) {
             Text(text = "Lets Start!")
         }

@@ -20,6 +20,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -43,7 +44,7 @@ fun scanScreen(
             context = context
         )
 
-        Spacer(modifier = Modifier.height(16.dp))
+        Spacer(modifier = Modifier.height(dimensionResource(R.dimen.padding_medium)))
 
         Row(
             modifier = Modifier.fillMaxWidth(),
@@ -53,7 +54,7 @@ fun scanScreen(
                 onClick = { viewModel.startScanning(context, serviceUUID) },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(stringResource(R.string.scan_button))
             }
@@ -61,7 +62,7 @@ fun scanScreen(
                 onClick = { /*TODO*/ },
                 modifier = Modifier
                     .fillMaxWidth()
-                    .padding(16.dp)
+                    .padding(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(stringResource(R.string.Done_button))
             }
@@ -116,14 +117,14 @@ fun DeviceCard(
     Card(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(8.dp),
-        shape = RoundedCornerShape(16.dp),
+            .padding(dimensionResource(R.dimen.padding_small)),
+        shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
         elevation = CardDefaults.cardElevation(4.dp),
         onClick = { onDeviceClicked(device.address) }
     ) {
         Column(
             modifier = Modifier
-                .padding(16.dp)
+                .padding(dimensionResource(R.dimen.padding_medium))
         ) {
             Text(
                 text = device.name ?: "Unknown",

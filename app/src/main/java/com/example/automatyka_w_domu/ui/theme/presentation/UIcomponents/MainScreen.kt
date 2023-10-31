@@ -21,15 +21,22 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.painter.Painter
+import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.automatyka_w_domu.R
 import com.example.automatyka_w_domu.model.UiState
 import com.example.automatyka_w_domu.ui.theme.AppViewModel
+import androidx.compose.runtime.setValue
+import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.stringResource
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -39,8 +46,8 @@ fun MainScreen(
     viewModel: AppViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    val devType: String
-    val connectedDevices = viewModel.toDeviceInfoList(devType = "")
+    var devType: String by remember { mutableStateOf("Any") }
+    val connectedDevices = viewModel.toDeviceInfoList(devType = devType)
 
     Column(
         modifier = modifier
@@ -51,14 +58,14 @@ fun MainScreen(
             items(connectedDevices) { device ->
                 Card(
                     modifier = Modifier
-                        .padding(8.dp)
+                        .padding(dimensionResource(R.dimen.padding_small))
                         .fillMaxWidth(),
-                    shape = RoundedCornerShape(16.dp),
-                    elevation = CardDefaults.cardElevation(4.dp)
+                    shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
+                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation))
                 ) {
                     Row(
                         modifier = Modifier
-                            .padding(8.dp)
+                            .padding(dimensionResource(R.dimen.padding_small))
                             .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically
                     ) {
@@ -68,7 +75,7 @@ fun MainScreen(
                             modifier = Modifier.size(40.dp)
                         )
 
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(dimensionResource(R.dimen.padding_medium)))
 
                         Text(
                             text = device.deviceName ?: "Unknown Device",
@@ -98,7 +105,7 @@ fun MainScreen(
         FloatingActionButton(
             onClick = onPlusButtonClicked,
             modifier = Modifier
-                .padding(16.dp)
+                .padding(dimensionResource(R.dimen.padding_medium))
                 .size(56.dp)
         ) {
             Icon(

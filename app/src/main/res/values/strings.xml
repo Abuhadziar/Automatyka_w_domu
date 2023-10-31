@@ -6,4 +6,9 @@
     <string name="scan_screen">Scan</string>
     <string name="main_screen_bar">Your Devices</string>
     <string name="main_screen">Main</string>
+    <string name="devType_band">Smart Band</string>
+    <string name="devType_tv">Smart TV</string>
+    <string name="devType_light">Smart Light</string>
+    <string name="devType_any">Any</string>
+
 </resources>
