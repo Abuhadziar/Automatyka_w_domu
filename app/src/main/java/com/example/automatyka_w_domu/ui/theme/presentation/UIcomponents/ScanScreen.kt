@@ -64,7 +64,7 @@ fun scanScreen(
                     .fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))
             ) {
-                Text(stringResource(R.string.Done_button))
+                Text(stringResource(R.string.done_button))
             }
         }
     }

@@ -37,4 +37,7 @@ class AppViewModel @Inject constructor(
         }
     }
 
+    fun doneButtonClicked() {
+
+    }
 }

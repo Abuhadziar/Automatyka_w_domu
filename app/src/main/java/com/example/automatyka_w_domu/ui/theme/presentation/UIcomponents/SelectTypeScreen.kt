@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.paddingFrom
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.Button
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardColors
 import androidx.compose.material3.CardDefaults
@@ -35,9 +36,11 @@ import androidx.compose.ui.unit.dp
 
 @Composable
 fun SelectDeviceType(
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    onCancelButtonClicked: () -> Unit,
+    onDoneButtonClicked: () -> Unit
 ) {
-    var selectedDevice by remember { mutableStateOf("") }
+    var selectedDevice by remember { mutableStateOf(0) }
 
     val deviceTypes = listOf(
         DeviceOption(stringResource(R.string.devType_band), R.drawable.smart_band_icon),
@@ -53,9 +56,33 @@ fun SelectDeviceType(
         deviceTypes.forEach { option ->
             SelectDeviceCard(
                 deviceOption = option,
-                isSelected = option.name == selectedDevice
+                isSelected = option.name == deviceTypes[selectedDevice].name
             ) {
-                selectedDevice = option.name
+                selectedDevice = deviceTypes.indexOf(option)
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceEvenly
+        ) {
+            Button(
+                onClick = { onCancelButtonClicked },
+                modifier = modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+            ) {
+                Text(
+                    text = stringResource(R.string.cancel_button)
+                )
+            }
+            Button(
+                onClick = { onDoneButtonClicked },
+                modifier = modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+            ) {
+                Text(
+                    text = stringResource(R.string.done_button)
+                )
             }
         }
     }
@@ -116,5 +143,5 @@ fun SelectDeviceCard(
 @Preview
 @Composable
 fun SelectDeviceTypePreview() {
-    SelectDeviceType()
+    SelectDeviceType(onCancelButtonClicked = {}, onDoneButtonClicked = {})
 }

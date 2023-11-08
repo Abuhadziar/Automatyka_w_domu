@@ -1,9 +1,11 @@
 package com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents
 
 import android.annotation.SuppressLint
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
@@ -36,7 +38,9 @@ import com.example.automatyka_w_domu.model.UiState
 import com.example.automatyka_w_domu.ui.theme.AppViewModel
 import androidx.compose.runtime.setValue
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.tooling.preview.Preview
 
 @SuppressLint("MissingPermission")
 @Composable
@@ -115,4 +119,17 @@ fun MainScreen(
             )
         }
     }
+}
+
+@Preview
+@Composable
+fun MainScreenPreview() {
+    // Tutaj możesz dostosować parametry do swoich potrzeb
+    MainScreen(
+        onPlusButtonClicked = {},
+        iconImage = painterResource(R.drawable.app_icon),
+        modifier = Modifier
+            .fillMaxSize()
+            .background(Color.White) // Opcjonalne tło
+    )
 }
