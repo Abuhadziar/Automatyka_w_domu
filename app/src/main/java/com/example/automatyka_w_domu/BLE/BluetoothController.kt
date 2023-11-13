@@ -20,6 +20,7 @@ import android.content.pm.PackageManager
 import android.util.Log
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import java.nio.charset.Charset
 
 class BluetoothController(private val context: Context, private val bluetoothViewModel: BluetoothViewModel) {
 
@@ -98,7 +99,7 @@ class BluetoothController(private val context: Context, private val bluetoothVie
         }
 
         @SuppressLint("MissingPermission")
-        fun discoverCharacteristicForDevice(device: BluetoothDevice, serviceUUID: UUID, characteristicUUID: UUID) {
+        fun writeCharacteristic(device: BluetoothDevice, serviceUUID: UUID, characteristicUUID: UUID, value: String) {
             val gattCallback = object : BluetoothGattCallback() {
                 override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
                     if (newState == BluetoothGatt.STATE_CONNECTED) {
@@ -109,13 +110,9 @@ class BluetoothController(private val context: Context, private val bluetoothVie
 
                 override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
                     val characteristic = gatt?.getService(serviceUUID)?.getCharacteristic(characteristicUUID)
-                    gatt?.readCharacteristic(characteristic)
-                    gatt?.setCharacteristicNotification(characteristic, true)
-                    characteristic?.value = byteArrayOf(50)
+                    characteristic?.value = value.toByteArray(Charset.forName("UTF-8"))
                     gatt?.writeCharacteristic(characteristic)
                 }
-
-                // ... reszta implementacji gattCallback
             }
 
             val gatt = device.connectGatt(context, true, gattCallback)

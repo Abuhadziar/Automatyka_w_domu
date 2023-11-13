@@ -3,10 +3,13 @@ package com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents
 import android.annotation.SuppressLint
 import android.bluetooth.BluetoothDevice
 import android.content.Context
+import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
@@ -19,25 +22,34 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.automatyka_w_domu.BLE.BluetoothViewModel
 import com.example.automatyka_w_domu.R
 import java.util.UUID
 
 
+@SuppressLint("NewApi")
 @Composable
-fun scanScreen(
+fun ScanScreen(
     viewModel: BluetoothViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
     context: Context,
-    serviceUUID: UUID
+    serviceUUID: UUID,
+    onDoneButtonClicked: () -> Unit
 ) {
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
         deviceList(
             viewModel = viewModel,
             modifier = Modifier.weight(1f),
@@ -53,15 +65,15 @@ fun scanScreen(
             Button(
                 onClick = { viewModel.startScanning(context, serviceUUID) },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    //.fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(stringResource(R.string.scan_button))
             }
             Button(
-                onClick = { /*TODO*/ },
+                onClick = { onDoneButtonClicked },
                 modifier = Modifier
-                    .fillMaxWidth()
+                    //.fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(stringResource(R.string.done_button))
@@ -71,6 +83,7 @@ fun scanScreen(
 
 }
 
+@RequiresApi(Build.VERSION_CODES.O)
 @SuppressLint("MissingPermission")
 @Composable
 fun deviceList(
@@ -81,10 +94,17 @@ fun deviceList(
     val scannedDevices = viewModel.scannedDevices
     val connectedDevices = viewModel.connectedDevices
     
-    Column(modifier = modifier) {
+    Column(
+        modifier = modifier
+        .fillMaxSize()
+    ) {
         Text(
-            text = "Scanned devices:",
-            fontWeight = FontWeight.Bold
+            text = "Scanned devices",
+            fontWeight = FontWeight.Bold,
+            style = androidx.compose.ui.text.TextStyle(fontSize = 24.sp),
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .align(Alignment.CenterHorizontally)
         )
         LazyColumn {
             items(scannedDevices) {device ->
@@ -93,9 +113,18 @@ fun deviceList(
                 }
             }
         }
+    }
+    Column(
+        modifier = modifier
+            .fillMaxSize()
+    ) {
         Text(
-            text = "Connected devices:",
-            fontWeight = FontWeight.Bold
+            text = "Connected devices",
+            fontWeight = FontWeight.Bold,
+            style = androidx.compose.ui.text.TextStyle(fontSize = 24.sp),
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.padding_medium))
+                .align(Alignment.CenterHorizontally)
         )
         LazyColumn {
             items(connectedDevices) {device ->
@@ -137,3 +166,4 @@ fun DeviceCard(
         }
     }
 }
+

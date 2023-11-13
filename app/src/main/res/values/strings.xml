@@ -4,6 +4,7 @@
     <string name="done_button">Done</string>
     <string name="start_screen">Start</string>
     <string name="scan_screen">Scan</string>
+    <string name="select_screen">Select</string>
     <string name="main_screen_bar">Your Devices</string>
     <string name="main_screen">Main</string>
     <string name="devType_band">Smart Band</string>

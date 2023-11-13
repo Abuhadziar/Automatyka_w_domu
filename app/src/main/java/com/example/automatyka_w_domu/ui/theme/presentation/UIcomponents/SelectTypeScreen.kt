@@ -33,14 +33,17 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.automatyka_w_domu.ui.theme.AppViewModel
 
 @Composable
 fun SelectDeviceType(
     modifier: Modifier = Modifier,
+    viewModel: AppViewModel = hiltViewModel(),
     onCancelButtonClicked: () -> Unit,
     onDoneButtonClicked: () -> Unit
 ) {
-    var selectedDevice by remember { mutableStateOf(0) }
+    var selectedDevice by viewModel.selectedDev
 
     val deviceTypes = listOf(
         DeviceOption(stringResource(R.string.devType_band), R.drawable.smart_band_icon),
@@ -59,6 +62,8 @@ fun SelectDeviceType(
                 isSelected = option.name == deviceTypes[selectedDevice].name
             ) {
                 selectedDevice = deviceTypes.indexOf(option)
+                viewModel.updateSelectedDevice(selectedDevice = selectedDevice)
+                viewModel.updateDeviceType(selectedDevice = selectedDevice)
             }
         }
         Row(

@@ -50,7 +50,7 @@ fun MainScreen(
     viewModel: AppViewModel = hiltViewModel(),
     modifier: Modifier = Modifier
 ) {
-    var devType: String by remember { mutableStateOf("Any") }
+    val devType: String by viewModel.deviceType
     val connectedDevices = viewModel.toDeviceInfoList(devType = devType)
 
     Column(
