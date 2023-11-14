@@ -33,13 +33,13 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.automatyka_w_domu.ui.theme.AppViewModel
 
 @Composable
 fun SelectDeviceType(
     modifier: Modifier = Modifier,
-    viewModel: AppViewModel = hiltViewModel(),
+    viewModel: AppViewModel = viewModel(),
     onCancelButtonClicked: () -> Unit,
     onDoneButtonClicked: () -> Unit
 ) {
@@ -72,7 +72,7 @@ fun SelectDeviceType(
             horizontalArrangement = Arrangement.SpaceEvenly
         ) {
             Button(
-                onClick = { onCancelButtonClicked },
+                onClick = { onCancelButtonClicked() },
                 modifier = modifier
                     .padding(dimensionResource(R.dimen.padding_medium))
             ) {
@@ -81,12 +81,12 @@ fun SelectDeviceType(
                 )
             }
             Button(
-                onClick = { onDoneButtonClicked },
+                onClick = { onDoneButtonClicked() },
                 modifier = modifier
                     .padding(dimensionResource(R.dimen.padding_medium))
             ) {
                 Text(
-                    text = stringResource(R.string.done_button)
+                    text = stringResource(R.string.next_button)
                 )
             }
         }
@@ -104,7 +104,7 @@ fun SelectDeviceCard(
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { onDeviceSelected }
+            .clickable { onDeviceSelected() }
             .padding(dimensionResource(R.dimen.padding_small))
     ) {
         Card(

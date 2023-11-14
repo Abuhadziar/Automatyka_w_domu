@@ -22,7 +22,10 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.nio.charset.Charset
 
-class BluetoothController(private val context: Context, private val bluetoothViewModel: BluetoothViewModel) {
+class BluetoothController (
+    private val context: Context,
+    private val bluetoothViewModel: BluetoothViewModel
+) {
 
     @SuppressLint("MissingPermission")
     fun scanForDevices(context: Context, serviceUUID: UUID) {

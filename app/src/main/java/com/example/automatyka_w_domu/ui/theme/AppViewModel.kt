@@ -13,16 +13,15 @@ import com.example.automatyka_w_domu.BLE.BluetoothViewModel
 import com.example.automatyka_w_domu.R
 import com.example.automatyka_w_domu.model.DeviceInfo
 import com.example.automatyka_w_domu.model.UiState
-import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import javax.inject.Inject
+
 @SuppressLint("MissingPermission")
-@HiltViewModel
-class AppViewModel @Inject constructor(
-    private val bluetoothViewModel: BluetoothViewModel
-) : ViewModel() {
+class AppViewModel : ViewModel() {
+
+    private val bluetoothViewModel = BluetoothViewModel()
+
     private val _uiState = MutableStateFlow(UiState(
         scannedDevices = bluetoothViewModel.scannedDevices.toMutableList(),
         connectedDevices = bluetoothViewModel.connectedDevices.toMutableList()

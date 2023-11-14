@@ -1,8 +1,6 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
-    id("com.google.dagger.hilt.android")
-    id("kotlin-kapt")
 }
 
 
@@ -71,10 +69,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
     //DI
-    implementation("com.google.dagger:hilt-android:2.44")
-    kapt("com.google.dagger:hilt-compiler:2.44")
-    kapt("androidx.hilt:hilt-compiler:1.0.0")
-    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     //Nav
     implementation("androidx.navigation:navigation-compose:2.7.4")

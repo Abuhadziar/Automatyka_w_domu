@@ -89,9 +89,8 @@ fun App() {
             composable(route = AppScreen.Start.name) {
                 StartScreen(
                     onStartButtonClicked = { navController.navigate(AppScreen.Main.name) },
-                    iconImage = painterResource(R.drawable.app_icon),
                     modifier = Modifier
-                        .fillMaxSize()
+                        //.fillMaxSize()
                         .padding(innerPadding)
                 )
             }
@@ -99,7 +98,8 @@ fun App() {
                 val iconImage = painterResource(viewModel.mainScreenIcon())
                 MainScreen(
                     onPlusButtonClicked = { navController.navigate(AppScreen.Select.name) },
-                    iconImage = iconImage
+                    iconImage = iconImage,
+                    viewModel = viewModel
                 )
             }
             composable(route = AppScreen.Select.name) {

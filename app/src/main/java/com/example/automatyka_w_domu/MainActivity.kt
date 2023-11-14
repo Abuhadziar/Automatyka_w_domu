@@ -10,37 +10,25 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import com.example.automatyka_w_domu.BLE.BluetoothController
+import com.example.automatyka_w_domu.BLE.BluetoothViewModel
+import com.example.automatyka_w_domu.ui.theme.AppViewModel
 import com.example.automatyka_w_domu.ui.theme.Automatyka_w_domuTheme
+import com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents.App
 
 class MainActivity : ComponentActivity() {
+    private lateinit var bluetoothController: BluetoothController
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContent {
             Automatyka_w_domuTheme {
-                // A surface container using the 'background' color from the theme
                 Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    modifier = Modifier.fillMaxSize()
                 ) {
-                    Greeting("Android")
+                    val bluetoothController = BluetoothController(this, BluetoothViewModel())
+                    App()
                 }
             }
         }
-    }
-}
-
-@Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-fun GreetingPreview() {
-    Automatyka_w_domuTheme {
-        Greeting("Android")
     }
 }

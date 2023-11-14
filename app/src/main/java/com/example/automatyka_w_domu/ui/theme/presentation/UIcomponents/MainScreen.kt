@@ -2,6 +2,7 @@ package com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -32,7 +33,6 @@ import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.dimensionResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.automatyka_w_domu.R
 import com.example.automatyka_w_domu.model.UiState
 import com.example.automatyka_w_domu.ui.theme.AppViewModel
@@ -41,13 +41,14 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.viewmodel.compose.viewModel
 
 @SuppressLint("MissingPermission")
 @Composable
 fun MainScreen(
     onPlusButtonClicked: () -> Unit,
     iconImage: Painter,
-    viewModel: AppViewModel = hiltViewModel(),
+    viewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier
 ) {
     val devType: String by viewModel.deviceType
@@ -57,7 +58,7 @@ fun MainScreen(
         modifier = modifier
     ) {
         LazyColumn(
-            modifier = Modifier
+            modifier = Modifier.weight(1f)
         ) {
             items(connectedDevices) { device ->
                 Card(
@@ -105,18 +106,24 @@ fun MainScreen(
                 }
             }
         }
-
-        FloatingActionButton(
-            onClick = onPlusButtonClicked,
+        Row(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium))
-                .size(56.dp)
+                .fillMaxWidth()
+                .padding(dimensionResource(R.dimen.padding_small)),
+            horizontalArrangement = Arrangement.Center
         ) {
-            Icon(
-                imageVector = Icons.Default.Add,
-                contentDescription = null,
-                tint = Color.White
-            )
+            FloatingActionButton(
+                onClick = { onPlusButtonClicked() },
+                modifier = Modifier
+                    .padding(dimensionResource(R.dimen.padding_medium))
+                    .size(56.dp)
+            ) {
+                Icon(
+                    imageVector = Icons.Default.Add,
+                    contentDescription = null,
+                    tint = Color.Unspecified
+                )
+            }
         }
     }
 }

@@ -31,7 +31,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.automatyka_w_domu.BLE.BluetoothViewModel
 import com.example.automatyka_w_domu.R
 import java.util.UUID
@@ -40,12 +40,12 @@ import java.util.UUID
 @SuppressLint("NewApi")
 @Composable
 fun ScanScreen(
-    viewModel: BluetoothViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
     context: Context,
     serviceUUID: UUID,
     onDoneButtonClicked: () -> Unit
 ) {
+    val viewModel: BluetoothViewModel = viewModel()
     Column(
         modifier = modifier
             .fillMaxSize()
@@ -71,7 +71,7 @@ fun ScanScreen(
                 Text(stringResource(R.string.scan_button))
             }
             Button(
-                onClick = { onDoneButtonClicked },
+                onClick = { onDoneButtonClicked() },
                 modifier = Modifier
                     //.fillMaxWidth()
                     .padding(dimensionResource(R.dimen.padding_medium))
@@ -87,7 +87,7 @@ fun ScanScreen(
 @SuppressLint("MissingPermission")
 @Composable
 fun deviceList(
-    viewModel: BluetoothViewModel = hiltViewModel(),
+    viewModel: BluetoothViewModel = viewModel(),
     context: Context,
     modifier: Modifier = Modifier
 ) {
@@ -103,7 +103,10 @@ fun deviceList(
             fontWeight = FontWeight.Bold,
             style = androidx.compose.ui.text.TextStyle(fontSize = 24.sp),
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium))
+                .padding(
+                    dimensionResource(R.dimen.padding_medium),
+                    top = dimensionResource(R.dimen.padding_small)
+                )
                 .align(Alignment.CenterHorizontally)
         )
         LazyColumn {
