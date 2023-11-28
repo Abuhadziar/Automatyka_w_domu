@@ -73,4 +73,50 @@ class BluetoothViewModel: ViewModel() {
             bluetoothController.deviceFound(device)
         }
     }
+
+    fun writeCharacteristic(
+        device: BluetoothDevice,
+        serviceUUID: UUID,
+        characteristicUUID: UUID,
+        value: String,
+        context: Context
+    ) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.BLUETOOTH_ADMIN
+            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(android.Manifest.permission.BLUETOOTH_ADMIN),
+                bluetoothPermissionCode
+            )
+        } else {
+            val bluetoothController = BluetoothController(context, this)
+            bluetoothController.writeCharacteristic(device, serviceUUID, characteristicUUID, value)
+        }
+    }
+
+    var readValue by mutableStateOf<String?>(null)
+    fun readCharacteristic(
+        device: BluetoothDevice,
+        serviceUUID: UUID,
+        characteristicUUID: UUID,
+        context: Context
+    ) {
+        if (ContextCompat.checkSelfPermission(
+                context,
+                android.Manifest.permission.BLUETOOTH_ADMIN
+            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                context as Activity,
+                arrayOf(android.Manifest.permission.BLUETOOTH_ADMIN),
+                bluetoothPermissionCode
+            )
+        } else {
+            val bluetoothController = BluetoothController(context, this)
+            bluetoothController.readCharacteristic(device, serviceUUID, characteristicUUID)
+        }
+    }
 }

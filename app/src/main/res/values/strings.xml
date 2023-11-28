@@ -13,5 +13,11 @@
     <string name="scan_button">Scan</string>
     <string name="done_button">Done</string>
     <string name="next_button">Next</string>
+    <string name="heart_rate">Heart Rate</string>
+    <string name="smart_band_screen">Smart Band</string>
+    <string name="smart_tv_screen">Smart TV</string>
+    <string name="smart_light_screen">Smart Light</string>
+    <string name="light_color">Color</string>
+    <string name="light_status">Status</string>
 
 </resources>

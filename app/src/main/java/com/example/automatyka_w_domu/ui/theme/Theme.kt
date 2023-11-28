@@ -82,7 +82,7 @@ private val DarkColors = darkColorScheme(
 
 @Composable
 fun Automatyka_w_domuTheme(
-    darkTheme: Boolean = true,
+    darkTheme: Boolean = false,
     // Dynamic color is available on Android 12+
     dynamicColor: Boolean = false,
     content: @Composable () -> Unit

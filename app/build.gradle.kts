@@ -72,4 +72,7 @@ dependencies {
 
     //Nav
     implementation("androidx.navigation:navigation-compose:2.7.4")
+
+    //Animation
+    implementation ("androidx.compose.animation:animation:1.1.0")
 }

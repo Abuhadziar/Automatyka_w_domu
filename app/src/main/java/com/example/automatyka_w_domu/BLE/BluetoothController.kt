@@ -22,12 +22,11 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import java.nio.charset.Charset
 
+@SuppressLint("MissingPermission")
 class BluetoothController (
     private val context: Context,
     private val bluetoothViewModel: BluetoothViewModel
 ) {
-
-    @SuppressLint("MissingPermission")
     fun scanForDevices(context: Context, serviceUUID: UUID) {
         val adapter = BluetoothAdapter.getDefaultAdapter()
 
@@ -80,14 +79,25 @@ class BluetoothController (
         }
     }
 
-    @SuppressLint("MissingPermission")
     internal fun deviceFound(device: BluetoothDevice): BluetoothDevice {
         device.connectGatt(context, true, gattCallback)
         return device
     }
 
+    private var pendingCharacteristicRead: Pair<UUID, UUID>? = null
+    private var pendingCharacteristicWrite: Triple<UUID, UUID, String>? = null
+    var readValue: String? = null
+
+    fun readCharacteristic(device: BluetoothDevice, serviceUUID: UUID, characteristicUUID: UUID) {
+        pendingCharacteristicRead = Pair(serviceUUID, characteristicUUID)
+        device.connectGatt(context, true, gattCallback)
+    }
+    fun writeCharacteristic(device: BluetoothDevice, serviceUUID: UUID, characteristicUUID: UUID, value: String) {
+        pendingCharacteristicWrite = Triple(serviceUUID, characteristicUUID, value)
+        device.connectGatt(context, true, gattCallback)
+    }
+
     private val gattCallback = object : BluetoothGattCallback() {
-        @SuppressLint("MissingPermission")
         override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
             if (newState == BluetoothGatt.STATE_CONNECTED) {
                 val device = gatt?.device
@@ -101,29 +111,30 @@ class BluetoothController (
             }
         }
 
-        @SuppressLint("MissingPermission")
-        fun writeCharacteristic(device: BluetoothDevice, serviceUUID: UUID, characteristicUUID: UUID, value: String) {
-            val gattCallback = object : BluetoothGattCallback() {
-                override fun onConnectionStateChange(gatt: BluetoothGatt?, status: Int, newState: Int) {
-                    if (newState == BluetoothGatt.STATE_CONNECTED) {
-                        gatt?.requestMtu(256)
-                        gatt?.discoverServices()
-                    }
-                }
-
-                override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
-                    val characteristic = gatt?.getService(serviceUUID)?.getCharacteristic(characteristicUUID)
-                    characteristic?.value = value.toByteArray(Charset.forName("UTF-8"))
-                    gatt?.writeCharacteristic(characteristic)
-                }
+        override fun onServicesDiscovered(gatt: BluetoothGatt?, status: Int) {
+            pendingCharacteristicWrite?.let { (serviceUUID, characteristicUUID, value) ->
+                val characteristic = gatt?.getService(serviceUUID)?.getCharacteristic(characteristicUUID)
+                characteristic?.value = value.toByteArray(Charset.forName("UTF-8"))
+                gatt?.writeCharacteristic(characteristic)
             }
+            pendingCharacteristicWrite = null
 
-            val gatt = device.connectGatt(context, true, gattCallback)
+            pendingCharacteristicRead?.let { (serviceUUID, characteristicUUID) ->
+                val characteristic = gatt?.getService(serviceUUID)?.getCharacteristic(characteristicUUID)
+                gatt?.readCharacteristic(characteristic)
+            }
+            pendingCharacteristicRead = null
         }
 
         override fun onCharacteristicRead(
             gatt: BluetoothGatt?, characteristic: BluetoothGattCharacteristic?, status: Int
-        ) { /* ... */
+        ) { if (status == BluetoothGatt.GATT_SUCCESS) {
+            characteristic?.value?.let { value ->
+                readValue = String(value)
+                bluetoothViewModel.readValue = readValue
+                Log.d(TAG, "Characteristic value: ${String(value)}")
+            }
+        }
         }
 
         override fun onCharacteristicWrite(

@@ -19,6 +19,7 @@ import androidx.compose.material.icons.filled.Add
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.CardElevation
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
@@ -42,11 +43,14 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
+import com.example.automatyka_w_domu.model.DeviceInfo
 
+@OptIn(ExperimentalMaterial3Api::class)
 @SuppressLint("MissingPermission")
 @Composable
 fun MainScreen(
     onPlusButtonClicked: () -> Unit,
+    onDeviceClicked: (DeviceInfo) -> Unit = {},
     iconImage: Painter,
     viewModel: AppViewModel = viewModel(),
     modifier: Modifier = Modifier
@@ -66,7 +70,8 @@ fun MainScreen(
                         .padding(dimensionResource(R.dimen.padding_small))
                         .fillMaxWidth(),
                     shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
-                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation))
+                    elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation)),
+                    onClick = { onDeviceClicked(device) }
                 ) {
                     Row(
                         modifier = Modifier

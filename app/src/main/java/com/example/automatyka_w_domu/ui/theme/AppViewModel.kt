@@ -1,6 +1,7 @@
 package com.example.automatyka_w_domu.ui.theme
 
 import android.annotation.SuppressLint
+import android.bluetooth.BluetoothDevice
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.State
 import androidx.compose.runtime.getValue
@@ -68,7 +69,7 @@ class AppViewModel : ViewModel() {
     }
 
     var serviceUUID = mutableStateOf("00001800-0000-1000-8000-00805f9b34fb")
-
+    var selectedDevice: BluetoothDevice? = null
     var selectedDev = mutableStateOf(3)
 
     fun updateSelectedDevice(selectedDevice: Int) {
@@ -86,9 +87,9 @@ class AppViewModel : ViewModel() {
         }
         when(selectedDevice) {
             0 -> serviceUUID.value = "0000180D-0000-1000-8000-00805F9B34FB"
-            1 -> serviceUUID.value = "0x0075"
+            1 -> serviceUUID.value = "00000075-0000-1000-8000-00805F9B34FB"
             2 -> serviceUUID.value = "0000FFF0-0000-1000-8000-00805F9B34FB"
-            3 -> serviceUUID.value = "00001800-0000-1000-8000-00805f9b34fb" //generic access
+            3 -> serviceUUID.value = "00001800-0000-1000-8000-00805F9B34FB" //generic access
         }
     }
 
