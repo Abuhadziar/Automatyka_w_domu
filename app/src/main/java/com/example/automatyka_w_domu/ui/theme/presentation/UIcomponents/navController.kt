@@ -95,6 +95,7 @@ fun App() {
             startDestination = AppScreen.Start.name
         ) {
             composable(route = AppScreen.Start.name) {
+                checkBluetoothPermissions(LocalContext.current, 123)
                 StartScreen(
                     onStartButtonClicked = { navController.navigate(AppScreen.Main.name) },
                     modifier = Modifier

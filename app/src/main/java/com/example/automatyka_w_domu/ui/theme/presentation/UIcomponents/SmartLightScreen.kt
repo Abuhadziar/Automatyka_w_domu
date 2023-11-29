@@ -6,6 +6,7 @@ import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,6 +20,7 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,6 +50,7 @@ fun SmartLightScreen(
     context: Context,
     modifier: Modifier = Modifier
 ) {
+    var isSelected: Boolean = false
     val colors = listOf(Color.White, Color.Red, Color.Green, Color.Blue)
     var selectedColor by remember { mutableStateOf(Color.White) }
     var expanded by remember { mutableStateOf(false) }
@@ -86,19 +89,19 @@ fun SmartLightScreen(
 
     Column(
         modifier = modifier
-            .fillMaxSize()
+            .fillMaxSize(),
+        verticalArrangement = Arrangement.Center
     ) {
         Card(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_small))
+                .padding(dimensionResource(R.dimen.padding_medium))
                 .fillMaxWidth(),
             shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
             elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation)),
-            onClick = { expanded = true }
+            onClick = { expanded = true ; isSelected = true },
         ) {
             Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = stringResource(R.string.light_color),
@@ -106,6 +109,7 @@ fun SmartLightScreen(
                         .padding(dimensionResource(R.dimen.padding_small)),
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp,
+                    color = if (isSelected) Color.LightGray else Color.Gray,
                 )
                 Box(
                     modifier = modifier
@@ -117,7 +121,7 @@ fun SmartLightScreen(
                 )
                 DropdownMenu(
                     expanded = expanded,
-                    onDismissRequest = { expanded = false },
+                    onDismissRequest = { expanded = false ; isSelected = false },
                     modifier = modifier
                         .animateContentSize(spring())
                 ) {
@@ -147,14 +151,13 @@ fun SmartLightScreen(
         }
         Card(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_small))
+                .padding(dimensionResource(R.dimen.padding_medium))
                 .fillMaxWidth(),
             shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
             elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation)),
         ) {
-            Row(
-                Modifier.fillMaxWidth(),
-                verticalAlignment = Alignment.CenterVertically,
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
             ) {
                 Text(
                     text = stringResource(R.string.light_status),
@@ -162,6 +165,7 @@ fun SmartLightScreen(
                         .padding(dimensionResource(R.dimen.padding_small)),
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp,
+                    color = Color.Gray,
                 )
                 Text(
                     text = if (status) {
@@ -170,9 +174,9 @@ fun SmartLightScreen(
                         "OFF"
                     },
                     color = if (status) {
-                        Color.Green
+                        MaterialTheme.colorScheme.onPrimary
                     } else {
-                        Color.Red
+                        Color.Gray
                     },
                     fontWeight = FontWeight.Bold,
                     fontSize = 40.sp,
