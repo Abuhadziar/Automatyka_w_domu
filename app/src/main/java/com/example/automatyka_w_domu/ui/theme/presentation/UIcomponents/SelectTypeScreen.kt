@@ -43,7 +43,7 @@ fun SelectDeviceType(
         DeviceOption(stringResource(R.string.devType_band), R.drawable.smart_band_icon),
         DeviceOption(stringResource(R.string.devType_tv), R.drawable.smart_tv_icon),
         DeviceOption(stringResource(R.string.devType_light), R.drawable.smart_light_icon),
-        DeviceOption(stringResource(R.string.devType_any), R.drawable.smart_toothbrush_icon)
+        DeviceOption(stringResource(R.string.toothbrush_screen), R.drawable.smart_toothbrush_icon)
     )
 
     Column(
