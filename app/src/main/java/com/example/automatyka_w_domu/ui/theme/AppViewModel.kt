@@ -16,7 +16,7 @@ class AppViewModel : ViewModel() {
         selectedDev.value = selectedDevice
     }
 
-    var deviceType = mutableStateOf("Any")
+    var deviceType = mutableStateOf("Smart Toothbrush")
 
     fun updateDeviceType(selectedDevice: Int) {
         when(selectedDevice) {
