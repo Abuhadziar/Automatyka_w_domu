@@ -1,4 +1,4 @@
-package com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents
+package com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -25,7 +25,7 @@ import com.example.automatyka_w_domu.BLE.BluetoothViewModel
 import com.example.automatyka_w_domu.R
 
 @Composable
-fun SmartBandScreen(
+fun ToothBrushScreen(
     viewModel: BluetoothViewModel,
     onTimeClicked: () -> Unit,
     modifier: Modifier = Modifier

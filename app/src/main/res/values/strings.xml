@@ -13,11 +13,20 @@
     <string name="scan_button">Scan</string>
     <string name="done_button">Done</string>
     <string name="next_button">Next</string>
+    <string name="connect_button">Connect</string>
     <string name="heart_rate">Heart Rate</string>
     <string name="smart_band_screen">Smart Band</string>
     <string name="smart_tv_screen">Smart TV</string>
     <string name="smart_light_screen">Smart Light</string>
     <string name="light_color">Color</string>
+    <string name="light_brightness">Brightness</string>
     <string name="light_status">Status</string>
+    <string name="smartTv_volume">Volume</string>
+    <string name="smartTv_channel">Channel</string>
+    <string name="battery_level">Battery Level</string>
+    <string name="current_time">Time</string>
+    <string name="current_date">Date</string>
+    <string name="time_screen">Time</string>
+    <string name="toothbrush_screen">Toothbrush</string>
 
 </resources>

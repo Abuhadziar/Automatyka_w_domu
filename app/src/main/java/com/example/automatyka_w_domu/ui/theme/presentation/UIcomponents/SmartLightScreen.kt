@@ -1,6 +1,5 @@
 package com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents
 
-import android.bluetooth.BluetoothDevice
 import android.content.Context
 import androidx.compose.animation.animateContentSize
 import androidx.compose.animation.core.spring
@@ -14,13 +13,14 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.DropdownMenu
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Slider
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -29,15 +29,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.dimensionResource
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.automatyka_w_domu.BLE.BluetoothViewModel
-import androidx.lifecycle.viewmodel.compose.viewModel
 import com.example.automatyka_w_domu.R
 import java.util.UUID
 
@@ -45,8 +44,8 @@ import java.util.UUID
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun SmartLightScreen(
-    viewModel: BluetoothViewModel = viewModel(),
-    device: BluetoothDevice,
+    //viewModel: BluetoothViewModel,
+    //device: BluetoothDevice,
     context: Context,
     modifier: Modifier = Modifier
 ) {
@@ -77,24 +76,56 @@ fun SmartLightScreen(
         }
     }
 
-    when (status) {
-        true -> {
-            viewModel.writeCharacteristic(device, serviceUUID, characteristicUUID, commandOn, context)
-        }
-        false -> {
-            viewModel.writeCharacteristic(device, serviceUUID, characteristicUUID, commandOff, context)
-        }
-    }
-    viewModel.writeCharacteristic(device, serviceUUID, characteristicUUID, command, context)
-
     Column(
         modifier = modifier
-            .fillMaxSize(),
-        verticalArrangement = Arrangement.Center
+            .fillMaxSize()
     ) {
         Card(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium))
+                .padding(dimensionResource(R.dimen.padding_small))
+                .fillMaxWidth(),
+            shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
+            elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation)),
+        ) {
+            Row (
+                horizontalArrangement = Arrangement.SpaceBetween,
+            ) {
+                Text(
+                    text = stringResource(R.string.light_status),
+                    modifier = modifier
+                        .padding(dimensionResource(R.dimen.padding_small)),
+                    fontWeight = FontWeight.Bold,
+                    fontSize = 35.sp,
+                    color = Color.Gray,
+                )
+                Text(
+                    text = if (status) {
+                        "ON"
+                    } else {
+                        "OFF"
+                    },
+                    color = if (status) {
+                        MaterialTheme.colorScheme.onPrimary
+                    } else {
+                        Color.Gray
+                    },
+                    fontWeight = FontWeight.Bold,
+                    modifier = modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .weight(1f),
+                    fontSize = 35.sp
+                )
+                androidx.compose.material3.Switch(
+                    checked = status,
+                    onCheckedChange = { status = it },
+                    modifier = modifier
+                        .padding(dimensionResource(R.dimen.padding_small))
+                )
+            }
+        }
+        Card(
+            modifier = Modifier
+                .padding(dimensionResource(R.dimen.padding_small))
                 .fillMaxWidth(),
             shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
             elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation)),
@@ -103,21 +134,28 @@ fun SmartLightScreen(
             Row(
                 horizontalArrangement = Arrangement.SpaceBetween,
             ) {
+                Icon(
+                    painter = painterResource(R.drawable.brush),
+                    contentDescription = null,
+                    tint = when (selectedColor) {
+                        Color.White -> Color.Gray
+                        Color.Red -> Color.Red
+                        Color.Green -> Color.Green
+                        Color.Blue -> Color.Blue
+                        else -> Color.Gray
+                    },
+                    modifier = Modifier
+                        .size(75.dp)
+                        .padding(dimensionResource(R.dimen.padding_small))
+                        .align(Alignment.CenterVertically)
+                )
                 Text(
                     text = stringResource(R.string.light_color),
                     modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small)),
+                        .padding(dimensionResource(R.dimen.padding_medium)),
                     fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp,
-                    color = if (isSelected) Color.LightGray else Color.Gray,
-                )
-                Box(
-                    modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small))
-                        .size(55.dp)
-                        .background(selectedColor)
-                        .clip(CircleShape)
-                        .align(Alignment.CenterVertically)
+                    fontSize = 35.sp,
+                    color = if (isSelected) Color.Black else Color.Gray,
                 )
                 DropdownMenu(
                     expanded = expanded,
@@ -149,48 +187,38 @@ fun SmartLightScreen(
                 }
             }
         }
+        var sliderValue by remember { mutableStateOf(0f) }
         Card(
             modifier = Modifier
-                .padding(dimensionResource(R.dimen.padding_medium))
+                .padding(dimensionResource(R.dimen.padding_small))
                 .fillMaxWidth(),
             shape = RoundedCornerShape(dimensionResource(R.dimen.padding_medium)),
             elevation = CardDefaults.cardElevation(dimensionResource(R.dimen.elevation)),
         ) {
-            Row (
-                horizontalArrangement = Arrangement.SpaceBetween,
-            ) {
-                Text(
-                    text = stringResource(R.string.light_status),
-                    modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small)),
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp,
-                    color = Color.Gray,
-                )
-                Text(
-                    text = if (status) {
-                        "ON"
-                    } else {
-                        "OFF"
-                    },
-                    color = if (status) {
-                        MaterialTheme.colorScheme.onPrimary
-                    } else {
-                        Color.Gray
-                    },
-                    fontWeight = FontWeight.Bold,
-                    fontSize = 40.sp,
-                    modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small))
-                        .weight(1f)
-                )
-                androidx.compose.material3.Switch(
-                    checked = status,
-                    onCheckedChange = { status = it },
-                    modifier = modifier
-                        .padding(dimensionResource(R.dimen.padding_small))
-                )
-            }
+            Text(
+                text = stringResource(R.string.light_brightness),
+                fontWeight = FontWeight.Medium,
+                fontSize = 20.sp,
+                modifier = Modifier
+                    .align(alignment = Alignment.CenterHorizontally)
+            )
+            Slider(
+                value = sliderValue,
+                onValueChange = { newValue ->
+                    sliderValue = newValue
+                },
+                valueRange = 0f..100f,
+                steps = 100,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(dimensionResource(R.dimen.padding_small))
+            )
         }
     }
+}
+
+@Preview
+@Composable
+fun SmartLightScreenPreview() {
+    SmartLightScreen(context = androidx.compose.ui.platform.LocalContext.current)
 }

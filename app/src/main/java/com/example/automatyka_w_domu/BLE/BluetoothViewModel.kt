@@ -1,122 +1,67 @@
 package com.example.automatyka_w_domu.BLE
 
-import android.app.Activity
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.content.Context
+import android.bluetooth.le.ScanResult
+import android.content.ContentValues.TAG
+import android.util.Log
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
 import androidx.lifecycle.ViewModel
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
 import androidx.compose.runtime.mutableStateOf
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
-import java.util.UUID
+import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.BLE.ConnectedDevice
+import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.model.CurrentTime
+import com.example.automatyka_w_domu.model.ScannedDevice
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableStateFlow
+import java.text.SimpleDateFormat
+import java.util.Calendar
+import java.util.Locale
 
 
 class BluetoothViewModel: ViewModel() {
-    var scannedDevices by mutableStateOf<List<BluetoothDevice>>(emptyList())
-        private set
-    var connectedDevices by mutableStateOf<List<BluetoothDevice>>(emptyList())
-        private set
 
-    fun addScannedDevice(device: BluetoothDevice) {
-        if (!scannedDevices.contains(device)) {
-            scannedDevices += device
-        }
+    var selectedDevice = mutableStateOf<ScanResult?>(null)
+    var selectedConnectedDevice = mutableStateOf<ConnectedDevice?>(null)
+    private var _connected = mutableListOf<ConnectedDevice>()
+    private val _connectedDevices = MutableStateFlow<List<ConnectedDevice>>(listOf())
+    val connectedDevices: Flow<List<ConnectedDevice>>
+        get() = _connectedDevices
+
+    fun startScanning() {
+        Scanner.startBleScan()
     }
 
-    fun addConnectedDevice(device: BluetoothDevice) {
-        if (!connectedDevices.contains(device)) {
-            connectedDevices += device
-        }
+    fun connectToDevice(device: ConnectedDevice) {
+        device.connect()
     }
 
-    private val bluetoothPermissionCode = 123
-    fun startScanning(
-        context: Context,
-        serviceUUID: UUID
-    ) {
-        if (ContextCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.BLUETOOTH_SCAN
-        ) != android.content.pm.PackageManager.PERMISSION_GRANTED
-            ) {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(android.Manifest.permission.BLUETOOTH_SCAN),
-                bluetoothPermissionCode
-            )
-        } else {
-            val bluetoothController = BluetoothController(context, BluetoothViewModel())
-            bluetoothController.scanForDevices(context, serviceUUID)
-        }
+    fun updateConnectedDevices(result: ScanResult, type: String) {
+        val device = ConnectedDevice(result, type)
+        connectToDevice(device)
+        _connected += device
+        Log.d(TAG, "updateConnectedDevices: ${_connected}")
+        _connectedDevices.value = _connected
     }
 
-    fun connectToDevice(
-        address: String,
-        context: Context
-    ) {
-        if (ContextCompat.checkSelfPermission(
-            context,
-            android.Manifest.permission.BLUETOOTH_CONNECT
-        ) != android.content.pm.PackageManager.PERMISSION_GRANTED
-            ) {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(android.Manifest.permission.BLUETOOTH_CONNECT),
-                bluetoothPermissionCode
-            )
-        } else {
-            val adapter = BluetoothAdapter.getDefaultAdapter()
-            val device = adapter.getRemoteDevice(address)
-            val bluetoothController = BluetoothController(context, BluetoothViewModel())
-            bluetoothController.deviceFound(device)
+    @Composable
+    fun getScannedDevices() = Scanner.devices.collectAsState(initial = emptyList()).value
+    @Composable
+    fun getConnectedDevices() = connectedDevices.collectAsState(initial = emptyList()).value
+    @Composable
+    fun getBatteryLevel(device: ConnectedDevice) = device.batteryLevel.collectAsState(initial = 0).value
+    @Composable
+    fun getCurrentTime(device: ConnectedDevice) = device.currentTime.collectAsState(initial = null).value
+
+    fun formatTime(time: CurrentTime?): String {
+        val outputFormat = SimpleDateFormat("dd/MM/yyyy", Locale.getDefault())
+        val calendar = Calendar.getInstance().apply {
+            time?.year?.let { set(Calendar.YEAR, it) }
+            time?.let { set(Calendar.MONTH, it.month) }
+            time?.let { set(Calendar.DAY_OF_MONTH, it.day) }
         }
+        return outputFormat.format(calendar.time)
     }
 
-    fun writeCharacteristic(
-        device: BluetoothDevice,
-        serviceUUID: UUID,
-        characteristicUUID: UUID,
-        value: String,
-        context: Context
-    ) {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.BLUETOOTH_ADMIN
-            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(android.Manifest.permission.BLUETOOTH_ADMIN),
-                bluetoothPermissionCode
-            )
-        } else {
-            val bluetoothController = BluetoothController(context, this)
-            bluetoothController.writeCharacteristic(device, serviceUUID, characteristicUUID, value)
-        }
-    }
-
-    var readValue by mutableStateOf<String?>(null)
-    fun readCharacteristic(
-        device: BluetoothDevice,
-        serviceUUID: UUID,
-        characteristicUUID: UUID,
-        context: Context
-    ) {
-        if (ContextCompat.checkSelfPermission(
-                context,
-                android.Manifest.permission.BLUETOOTH_ADMIN
-            ) != android.content.pm.PackageManager.PERMISSION_GRANTED
-        ) {
-            ActivityCompat.requestPermissions(
-                context as Activity,
-                arrayOf(android.Manifest.permission.BLUETOOTH_ADMIN),
-                bluetoothPermissionCode
-            )
-        } else {
-            val bluetoothController = BluetoothController(context, this)
-            bluetoothController.readCharacteristic(device, serviceUUID, characteristicUUID)
-        }
+    fun setCurrentTime(device: ConnectedDevice, time: CurrentTime) {
+        device.setCurrentTime(time)
     }
 }
