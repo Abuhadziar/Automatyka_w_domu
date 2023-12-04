@@ -15,10 +15,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.navigation.compose.NavHost
@@ -28,15 +26,12 @@ import androidx.navigation.compose.rememberNavController
 import com.example.automatyka_w_domu.R
 import com.example.automatyka_w_domu.ui.theme.AppViewModel
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.unit.dp
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import com.example.automatyka_w_domu.BLE.BluetoothViewModel
-import com.example.automatyka_w_domu.BLE.Scanner
 import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents.SetTimeScreen
 import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents.SmartTvScreen
 import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.ui.theme.presentation.UIcomponents.ToothBrushScreen
-import java.util.UUID
 
 enum class AppScreen(@StringRes val title: Int) {
     Start(title = R.string.start_screen),
@@ -152,7 +147,7 @@ fun App() {
                 val context = LocalContext.current
                 checkBluetoothPermissions(context, 123)
                 SmartLightScreen(
-                    context = context,
+                    viewModel = bluetoothViewModel,
                     modifier = Modifier
                         .padding(innerPadding)
                 )

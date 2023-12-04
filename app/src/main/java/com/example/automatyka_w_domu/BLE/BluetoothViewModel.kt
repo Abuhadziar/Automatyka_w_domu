@@ -9,7 +9,6 @@ import androidx.lifecycle.ViewModel
 import androidx.compose.runtime.mutableStateOf
 import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.BLE.ConnectedDevice
 import com.example.automatyka_w_domu.BLE.com.example.automatyka_w_domu.model.CurrentTime
-import com.example.automatyka_w_domu.model.ScannedDevice
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import java.text.SimpleDateFormat
@@ -63,5 +62,9 @@ class BluetoothViewModel: ViewModel() {
 
     fun setCurrentTime(device: ConnectedDevice, time: CurrentTime) {
         device.setCurrentTime(time)
+    }
+
+    fun setLightColor(device: ConnectedDevice, command: String) {
+        device.setLightColor(command)
     }
 }

@@ -24,6 +24,8 @@ class ConnectedDevice(val result: ScanResult, val type: String) {
     private val Battery_Level_UUID = UUID.fromString("00002a19-0000-1000-8000-00805f9b34fb")
     private val Time_Service_UUID = UUID.fromString("0000fee0-0000-1000-8000-00805F9B34FB")
     private val Current_Time_UUID = UUID.fromString("00002a2b-0000-1000-8000-00805f9b34fb")
+    private val Light_Service_UUID: UUID = UUID.fromString("0000fff0-0000-1000-8000-00805f9b34fb")
+    private val Light_Color_Characteristic_UUID: UUID = UUID.fromString("0000fff1-0000-1000-8000-00805f9b34fb")
 
     private val _batteryLevel = MutableStateFlow<Int>(0)
     val batteryLevel: Flow<Int>
@@ -114,6 +116,21 @@ class ConnectedDevice(val result: ScanResult, val type: String) {
             Log.d(TAG, "setCurrentTime: ${characteristic.value}")
         }
     }
+    fun setLightColor(command: String) {
+        val service = bluetoothGatt?.getService(Light_Service_UUID)
+        val characteristic = service?.getCharacteristic(Light_Color_Characteristic_UUID)
+
+        if (characteristic != null) {
+            val commandAsLong = command.toLong(2)
+            val buffer = ByteBuffer.allocate(3).order(ByteOrder.LITTLE_ENDIAN)
+            buffer.putShort((commandAsLong and 0xFFFF).toShort())
+            buffer.put(((commandAsLong shr 16) and 0xFF).toByte())
+
+            characteristic.value = buffer.array()
+            bluetoothGatt?.writeCharacteristic(characteristic)
+        }
+    }
+
     fun connect() {
         bluetoothGatt = result.device.connectGatt(
             MainApplication.appContext, false, bluetoothGattCallback,
