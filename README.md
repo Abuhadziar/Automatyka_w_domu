@@ -1,4 +1,4 @@
-![app_icon](https://github.com/Abuhadziar/Automatyka_w_domu/assets/130935744/72ca04f3-7af0-43f1-9e93-68c2be86cc87)
+![image](https://github.com/Abuhadziar/Automatyka_w_domu/assets/130935744/eb92c05d-3fbb-4cf1-807b-4d40d522cabe)
 Automatyka w domu is a simple application designed to establish connection and exchange data with smart devices using the Bluetooth Low Energy (BLE) protocol. 
 The app is written in Kotlin using the Jetpack Compose toolkit. The implementation was done according to the Model-View-ViewModel architectural pattern.
 # Key functionalities
