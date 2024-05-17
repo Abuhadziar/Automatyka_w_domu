@@ -62,7 +62,6 @@ class ConnectedDevice(val result: ScanResult, val type: String) {
                     gatt.readCharacteristic(batteryLevel)
                 }
             }
-            Log.d(TAG, "dupa")
         }
 
         override fun onCharacteristicRead(

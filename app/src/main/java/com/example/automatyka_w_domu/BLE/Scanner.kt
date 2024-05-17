@@ -44,21 +44,15 @@ object Scanner {
         ScanSettings.Builder().setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY).build()
 
 
-    private val _isScanning = MutableLiveData(false)
-    val isScanning: LiveData<Boolean> = _isScanning
-
     private val handler = Handler(Looper.getMainLooper())
 
 
     private val runnableStoppingScanning = {
-        _isScanning.value = false
         scanner.stopScan(leScanCallback)
     }
 
     fun startBleScan() {
-        Log.v("startScan","wziuuum")
         handler.postDelayed(runnableStoppingScanning, SCAN_PERIOD_IN_MS)
-        _isScanning.value = true
 
         scanner.startScan(null, scanSettings, leScanCallback)
     }
@@ -67,7 +61,6 @@ object Scanner {
 
     private val leScanCallback = object : ScanCallback() {
         override fun onScanResult(callbackType: Int, result: ScanResult?) {
-            Log.v("result","lel")
             result?.let {
                 val device = ScannedDevice(result)
 
